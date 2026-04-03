@@ -10,7 +10,11 @@ import {Input} from "@/components/ui/input"
 import FormField from "./FormField"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
-
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase/client";
+import { signUp } from "@/lib/actions/auth.action";
+import {signIn} from "@/lib/actions/auth.action"
 
 const authFormSchema = (type: FormType) =>{
     return z.object({
@@ -35,19 +39,64 @@ const AuthForm = ({type}: {type: FormType}) => {
     })
 
     //2. Deine a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>){
+    async function onSubmit(values: z.infer<typeof formSchema>){
         try{
             if(type === "sign-up"){
+                const{ name, email, password} = values;
+
+                const userCredentials = await createUserWithEmailAndPassword(auth,email,password);
+                const result = await signUp({
+                    uid: userCredentials.user.uid,
+                    name: name!,
+                    email,
+                    password,
+                })
+
+                if(!result?.success){
+                    toast.error(result?.message);
+                    return;
+                }
                 toast.success('Account created successfully. Please sign in.');
                 router.push('/sign-in');
             }
             else{
+                const {email,password} = values;
+                const userCredentials = await signInWithEmailAndPassword(auth,email,password);
+                const idToken = await userCredentials.user.getIdToken();
+
+                if(!idToken){
+                    toast.error('Sign in failed');
+                    return;
+                }
+                const result = await signIn({
+                    email,idToken
+                })
+                
+                if(!result?.success){
+                    toast.error(result?.message || 'Sign in failed');
+                    return;
+                }
+                
                 toast.success('Sign in successfully.');
                 router.push('/');
             }
-        }catch(error){
+        }catch(error: any){
             console.log(error);
-            toast.error(`There was an error: ${error}`)
+            
+            // Handle Firebase Auth errors with user-friendly messages
+            if(error.code === 'auth/email-already-in-use'){
+                toast.error('This email is already in use. Please sign in instead.');
+            } else if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found'){
+                toast.error('Invalid email or password. Please try again.');
+            } else if(error.code === 'auth/weak-password'){
+                toast.error('Password is too weak. Please use a stronger password.');
+            } else if(error.code === 'auth/invalid-email'){
+                toast.error('Invalid email address.');
+            } else if(error.code === 'auth/too-many-requests'){
+                toast.error('Too many failed attempts. Please try again later.');
+            } else {
+                toast.error('An error occurred. Please try again.');
+            }
         }
     }
 
