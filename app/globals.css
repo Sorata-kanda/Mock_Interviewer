@@ -330,3 +330,19 @@
     transform: translateY(0);
   }
 }
+
+/* Modern Slide Transition Animation */
+@utility animate-modern-slide {
+  animation: modernSlide 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modernSlide {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

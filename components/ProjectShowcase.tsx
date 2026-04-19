@@ -55,9 +55,16 @@ function ElectronCursor() {
 export default function ProjectShowcase() {
   const [current, setCurrent] = useState(0);
   const [showNavigation, setShowNavigation] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const total = 15;
   const next = useCallback(() => setCurrent(c => Math.min(c + 1, total - 1)), []);
   const prev = useCallback(() => setCurrent(c => Math.max(c - 1, 0)), []);
+
+  useEffect(() => {
+    setIsAnimating(true);
+    const timer = setTimeout(() => setIsAnimating(false), 700);
+    return () => clearTimeout(timer);
+  }, [current]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -81,11 +88,16 @@ export default function ProjectShowcase() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Modern animation for all slides
+  const getSlideAnimation = () => {
+    return isAnimating ? 'animate-modern-slide' : '';
+  };
+
   const renderSlide = (slideIndex: number) => {
     switch (slideIndex) {
       case 0:
         return (
-          <div className="flex flex-col items-center justify-center h-full text-center px-12 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
+          <div className={`flex flex-col items-center justify-center h-full text-center px-12 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] ${getSlideAnimation()}`}>
             <div className="mb-6 animate-pulse hover:animate-none hover:opacity-80 transition-all duration-500">
               <Image 
                 src="/logo.svg" 
@@ -111,7 +123,7 @@ export default function ProjectShowcase() {
         );
       case 1:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a0533] via-[#2d1b69] to-[#11998e]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a0533] via-[#2d1b69] to-[#11998e] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">Why does interview prep <span className="text-red-400">fail?</span></h2>
             <p className="text-white/60 mb-10 text-lg">Most candidates walk in underprepared. Here's why traditional prep doesn't work.</p>
             <div className="grid grid-cols-3 gap-6">
@@ -150,7 +162,7 @@ export default function ProjectShowcase() {
         );
       case 2:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Prepwise</span></h2>
             <p className="text-white/60 mb-10 text-lg">One platform. Real AI. Actual results. Here's how we solve interview prep.</p>
             <div className="grid grid-cols-2 gap-6">
@@ -194,7 +206,7 @@ export default function ProjectShowcase() {
         );
       case 3:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#16213e] via-[#0f3460] to-[#533483]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#16213e] via-[#0f3460] to-[#533483] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">How It <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Works</span></h2>
             <p className="text-white/60 mb-8 text-lg">From sign-up to feedback in 4 simple steps. The entire process takes just 10-15 minutes.</p>
             <div className="space-y-5">
@@ -240,7 +252,7 @@ export default function ProjectShowcase() {
         );
       case 4:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0d0d0d] via-[#1a1a2e] to-[#16213e]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0d0d0d] via-[#1a1a2e] to-[#16213e] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">Tech <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-400">Stack</span></h2>
             <p className="text-white/60 mb-8 text-lg">Built with modern, production-grade technologies for scalability, performance, and developer experience.</p>
             <div className="grid grid-cols-3 gap-5">
@@ -306,7 +318,7 @@ export default function ProjectShowcase() {
         );
       case 5:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1f1c2c] via-[#928dab] to-[#1f1c2c]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1f1c2c] via-[#928dab] to-[#1f1c2c] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">🔐 Authentication <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">Flow</span></h2>
             <p className="text-white/60 mb-8 text-lg">Secure, session-based authentication powered by Firebase Admin SDK with production-grade security.</p>
             <div className="grid grid-cols-2 gap-8">
@@ -353,7 +365,7 @@ export default function ProjectShowcase() {
         );
       case 6:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#2d1b69]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#2d1b69] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">✨ AI Question <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Generation</span></h2>
             <p className="text-white/60 mb-8 text-lg">Google Gemini 2.5 Flash creates personalized interview questions on demand, tailored to your exact requirements.</p>
             <div className="grid grid-cols-2 gap-8 items-start">
@@ -419,7 +431,7 @@ export default function ProjectShowcase() {
         );
       case 7:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0f0c29] via-[#1a1a4e] to-[#302b63]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0f0c29] via-[#1a1a4e] to-[#302b63] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">🎙️ Voice Interview <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Agent</span></h2>
             <p className="text-white/60 mb-8 text-lg">Vapi AI conducts a real-time spoken interview — no typing, just natural conversation like a real interviewer.</p>
             <div className="grid grid-cols-3 gap-6">
@@ -473,7 +485,7 @@ export default function ProjectShowcase() {
         );
       case 8:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#134e5e] via-[#71b280] to-[#134e5e]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#134e5e] via-[#71b280] to-[#134e5e] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">📊 Performance <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-300">Report</span></h2>
             <p className="text-white/60 mb-8 text-lg">After every interview, you get a comprehensive 15-slide interactive report with actionable insights.</p>
             <div className="grid grid-cols-2 gap-8">
@@ -529,7 +541,7 @@ export default function ProjectShowcase() {
         );
       case 9:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">🏠 Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Dashboard</span></h2>
             <p className="text-white/60 mb-8 text-lg">Everything in one place — your interview history, progress tracking, and quick actions for continuous improvement.</p>
             <div className="grid grid-cols-3 gap-5">
@@ -589,7 +601,7 @@ export default function ProjectShowcase() {
         );
       case 10:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0d0d0d] via-[#1a0533] to-[#2d1b69]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#0d0d0d] via-[#1a0533] to-[#2d1b69] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">🏗️ <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-400">Architecture</span></h2>
             <p className="text-white/60 mb-8 text-lg">A clean, scalable full-stack architecture built on Next.js App Router with modern best practices.</p>
             <div className="grid grid-cols-3 gap-4 text-sm">
@@ -645,7 +657,7 @@ export default function ProjectShowcase() {
         );
       case 11:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">⭐ Key <span className="text-white/80">Features</span></h2>
             <p className="text-white/70 mb-8 text-lg">What makes Prepwise stand out from traditional interview prep platforms and generic practice tools.</p>
             <div className="grid grid-cols-2 gap-5">
@@ -701,7 +713,7 @@ export default function ProjectShowcase() {
         );
       case 12:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">🎬 Demo <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">Flow</span></h2>
             <p className="text-white/60 mb-8 text-lg">A complete end-to-end walkthrough of the user journey from landing to getting actionable feedback.</p>
             <div className="relative">
@@ -762,7 +774,7 @@ export default function ProjectShowcase() {
         );
       case 13:
         return (
-          <div className="flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a1a2e] via-[#533483] to-[#1a1a2e]">
+          <div className={`flex flex-col justify-center h-full px-16 bg-gradient-to-br from-[#1a1a2e] via-[#533483] to-[#1a1a2e] ${getSlideAnimation()}`}>
             <h2 className="text-5xl font-black text-white mb-3">🗺️ <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Roadmap</span></h2>
             <p className="text-white/60 mb-8 text-lg">What's coming next for Prepwise — exciting features and improvements on the horizon.</p>
             <div className="grid grid-cols-3 gap-6">
@@ -820,7 +832,7 @@ export default function ProjectShowcase() {
         );
       case 14:
         return (
-          <div className="flex flex-col items-center justify-center h-full text-center px-12 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
+          <div className={`flex flex-col items-center justify-center h-full text-center px-12 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] ${getSlideAnimation()}`}>
             <div className="text-8xl mb-6 animate-bounce"></div>
             <h2 className="text-7xl font-black text-white mb-4">
               Thank <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">You!</span>
