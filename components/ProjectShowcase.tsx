@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 function ElectronCursor() {
   const [pos, setPos] = useState({ x: -200, y: -200 });
@@ -85,7 +86,15 @@ export default function ProjectShowcase() {
       case 0:
         return (
           <div className="flex flex-col items-center justify-center h-full text-center px-12 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
-            <div className="text-8xl mb-6 animate-bounce">🤖</div>
+            <div className="mb-6 animate-pulse hover:animate-none hover:opacity-80 transition-all duration-500">
+              <Image 
+                src="/logo.svg" 
+                alt="Prepwise Logo" 
+                width={120} 
+                height={120}
+                className="drop-shadow-2xl"
+              />
+            </div>
             <h1 className="text-7xl font-black text-white mb-4 tracking-tight">
               Prep<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">wise</span>
             </h1>
