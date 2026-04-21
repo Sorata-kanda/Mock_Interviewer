@@ -157,33 +157,13 @@ End the conversation on a polite and positive note.
 
 export const feedbackSchema = z.object({
   totalScore: z.number(),
-  categoryScores: z.tuple([
+  categoryScores: z.array(
     z.object({
-      name: z.literal("Communication Skills"),
+      name: z.string(),
       score: z.number(),
       comment: z.string(),
-    }),
-    z.object({
-      name: z.literal("Technical Knowledge"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-    z.object({
-      name: z.literal("Problem Solving"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-    z.object({
-      name: z.literal("Cultural Fit"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-    z.object({
-      name: z.literal("Confidence and Clarity"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-  ]),
+    })
+  ),
   strengths: z.array(z.string()),
   areasForImprovement: z.array(z.string()),
   finalAssessment: z.string(),
@@ -226,5 +206,49 @@ export const dummyInterviews: Interview[] = [
     questions: ["What is Node.js?"],
     finalized: false,
     createdAt: "2024-03-14T15:30:00Z",
+  },
+  {
+    id: "3",
+    userId: "user1",
+    role: "Backend Developer",
+    type: "Technical",
+    techstack: ["Python", "Django", "PostgreSQL", "Redis"],
+    level: "Mid",
+    questions: ["Explain REST API design principles"],
+    finalized: false,
+    createdAt: "2024-03-13T09:15:00Z",
+  },
+  {
+    id: "4",
+    userId: "user1",
+    role: "DevOps Engineer",
+    type: "Technical",
+    techstack: ["Docker", "Kubernetes", "AWS", "Jenkins"],
+    level: "Senior",
+    questions: ["What is container orchestration?"],
+    finalized: false,
+    createdAt: "2024-03-12T14:20:00Z",
+  },
+  {
+    id: "5",
+    userId: "user1",
+    role: "Data Scientist",
+    type: "Mixed",
+    techstack: ["Python", "TensorFlow", "Pandas", "SQL"],
+    level: "Mid",
+    questions: ["Explain machine learning workflow"],
+    finalized: false,
+    createdAt: "2024-03-11T11:45:00Z",
+  },
+  {
+    id: "6",
+    userId: "user1",
+    role: "Mobile Developer",
+    type: "Technical",
+    techstack: ["React Native", "TypeScript", "Firebase", "Redux"],
+    level: "Junior",
+    questions: ["What is React Native?"],
+    finalized: false,
+    createdAt: "2024-03-10T16:30:00Z",
   },
 ];

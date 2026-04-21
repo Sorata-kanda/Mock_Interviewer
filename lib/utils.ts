@@ -45,3 +45,21 @@ export const getRandomInterviewCover = () => {
   const randomIndex = Math.floor(Math.random() * interviewCovers.length);
   return `/covers${interviewCovers[randomIndex]}`;
 }
+
+// Deterministic cover selection based on interview ID
+export const getInterviewCover = (interviewId?: string) => {
+  if (!interviewId) {
+    return getRandomInterviewCover();
+  }
+  
+  // Create a simple hash from the interview ID
+  let hash = 0;
+  for (let i = 0; i < interviewId.length; i++) {
+    hash = ((hash << 5) - hash) + interviewId.charCodeAt(i);
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  
+  // Use absolute value and modulo to get index
+  const index = Math.abs(hash) % interviewCovers.length;
+  return `/covers${interviewCovers[index]}`;
+}

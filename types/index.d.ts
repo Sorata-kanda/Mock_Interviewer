@@ -97,3 +97,25 @@ interface InterviewFormProps {
 interface TechIconProps {
   techStack: string[];
 }
+
+interface CreateInterviewParams {
+  userId: string;
+  role: string;
+  level: string;
+  type: string;
+  techstack: string[];
+  questions: string[];
+}
+
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: number;
+}
+
+interface ChatInterviewProps {
+  userName: string;
+  userId: string;
+  interviewId: string;
+  questions: string[];
+}
